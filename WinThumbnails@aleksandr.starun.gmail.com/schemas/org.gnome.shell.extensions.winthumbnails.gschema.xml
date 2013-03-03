@@ -38,7 +38,15 @@
     <key type="b" name="show-app-icon">
       <default>true</default>
       <summary>Enable/disable application icon in the corner.</summary>
-    </key>    
+    </key>
+    <key type="b" name="show-app-title">
+      <default>true</default>
+      <summary>Enable/disable application title.</summary>
+    </key>
+    <key type="b" name="show-close-button">
+      <default>true</default>
+      <summary>Enable/disable application close button.</summary>
+    </key>      
     <key type="b" name="show-window-tooltip">
       <default>false</default>
       <summary>Enable/disable window tooltip.</summary>

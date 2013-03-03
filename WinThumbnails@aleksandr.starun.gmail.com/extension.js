@@ -44,11 +44,13 @@ const WTH_AUTOHIDE_ANIMATION_TIME_KEY = 'hide-effect-duration';
 const WTH_SHOW_APP_ICON = 'show-app-icon';
 const WTH_SHOW_WIN_TOOLTIP = 'show-window-tooltip';
 const WTH_SHOW_ONLY_MINIMIZE_WINDOW = 'show-only-minimize-window';
+const WTH_SHOW_APP_TITLE = 'show-app-title';
+const WTH_SHOW_CLOSE_BUTTON = 'show-close-button';
 
 // Old settings
-let closeButtonSize = 24;
+let closeButtonSize = 32;
 let thumbnail_size = 1;
-let app_icon_size = 16;
+let app_icon_size = 32;
 let dockicon_size = 1;
 
 // Keep enums in sync with GSettings schemas
@@ -72,7 +74,7 @@ function updateClip(actor) {
 
     // Here we implicitly assume that the stage and actor's parent
     // share the same coordinate space
-    let clip = new Clutter.ActorBox({ x1: Math.max(monitor.x, allocation.x1),
+    let clip = new Clutter.ActoropacBox({ x1: Math.max(monitor.x, allocation.x1),
 				      y1: Math.max(monitor.y, allocation.y1),
 				      x2: Math.min(monitor.x + monitor.width, allocation.x2),
 				      y2: Math.min(monitor.y + monitor.height, allocation.y2) });
@@ -351,6 +353,8 @@ const Dock = new Lang.Class({
         this._hidden = false;
         this._hideable = this._settings.get_boolean(WTH_HIDE_KEY);
         this._isShowAppIcon = this._settings.get_boolean(WTH_SHOW_APP_ICON);
+        this._isShowCloseButton = this._settings.get_boolean(WTH_SHOW_CLOSE_BUTTON);
+        this._isShowAppTitle = this._settings.get_boolean(WTH_SHOW_APP_TITLE);
         this._isShowWinTooltip = this._settings.get_boolean(WTH_SHOW_WIN_TOOLTIP);
         this._isShowOnlyMinWin = this._settings.get_boolean(WTH_SHOW_ONLY_MINIMIZE_WINDOW);
         
@@ -394,6 +398,7 @@ const Dock = new Lang.Class({
         }));
         Main.layoutManager.addChrome(this.actor,
                                      { affectsStruts: !this._settings.get_boolean(WTH_HIDE_KEY) });
+
 
         //hidden
         this._settings.connect('changed::'+WTH_POSITION_KEY, Lang.bind(this, this._redisplay));
@@ -448,6 +453,14 @@ const Dock = new Lang.Class({
             this._isShowOnlyMinWin = this._settings.get_boolean(WTH_SHOW_ONLY_MINIMIZE_WINDOW);
             this._redisplay();
 		}));
+        this._settings.connect('changed::'+WTH_SHOW_APP_TITLE, Lang.bind(this, function () {
+            this._isShowAppTitle = this._settings.get_boolean(WTH_SHOW_APP_TITLE);
+            this._redisplay();
+        }));
+        this._settings.connect('changed::'+WTH_SHOW_CLOSE_BUTTON, Lang.bind(this, function () {
+            this._isShowCloseButton = this._settings.get_boolean(WTH_SHOW_CLOSE_BUTTON);
+            this._redisplay();
+        }));
         this._leave_event = this.actor.connect('leave-event', Lang.bind(this, this._hideDock));
         this._enter_event = this.actor.connect('enter-event', Lang.bind(this, this._showDock));
 
@@ -690,6 +703,8 @@ DockThumbnail = new Lang.Class({
 /*        this.actorBox = new St.BoxLayout({vertical: true,
                                           reactive: true,
                                           can_focus: true}); */
+
+
         this.actorBox = new Clutter.Group({clip_to_allocation: true});
         this.actor.connect('button-press-event', Lang.bind(this, this._onButtonPress));                                          
         this.actor.connect('enter-event', Lang.bind(this, this.select));
@@ -720,8 +735,11 @@ DockThumbnail = new Lang.Class({
         this.iconWidth = width;
         this.iconHeight = height;
         this.set_size(this.iconWidth, this.iconHeight);  
-        this.actorBox.add_actor(this._iconBin, { x_fill: true, y_fill: true } );           
-        this._AddCloseButton(this.actorBox, width);
+        this.actorBox.add_actor(this._iconBin, { x_fill: true, y_fill: true } );     
+
+        if (this._dock._isShowCloseButton) {
+            this._AddCloseButton(this.actorBox, width);
+        }  
     },
 
     select: function() {
@@ -768,6 +786,10 @@ DockThumbnail = new Lang.Class({
         if (this._dock._isShowAppIcon) {
             this._addApplicationIcon(clone);
         }
+
+        if (this._dock._isShowAppTitle) {
+            this._addApplicationTitle(clone);
+        }
         
         this._iconBin.set_size(iconWidth, iconHeight);
 
@@ -809,6 +831,34 @@ DockThumbnail = new Lang.Class({
         applicationIconBox.add_actor(this._app_icon);	
         
         parent.add_actor(applicationIconBox);	
+    },
+
+    _addApplicationTitle: function(parent) {
+
+        let title = this.window.get_title();
+
+        if (!title) {
+            title = this.app.get_name();
+        }
+
+        this._label = new St.Label({ style_class: 'app-title', text: title });
+
+        let applicationLabelBox = null;
+        // let label_size = 32;
+
+        if (this._dock._settings.get_enum(WTH_POSITION_KEY) == PositionMode.LEFT) {
+            applicationLabelBox = new St.Bin();
+            applicationLabelBox.set_size(parent.width, parent.height);
+        }
+        else {
+            applicationLabelBox = new St.Bin();
+            applicationLabelBox.set_size(parent.width, parent.height);
+        }  
+
+        applicationLabelBox.set_opacity(255);
+        applicationLabelBox.add_actor(this._label);   
+        
+        parent.add_actor(applicationLabelBox);  
     },
 
     _AddCloseButton: function(parent, parent_width) {

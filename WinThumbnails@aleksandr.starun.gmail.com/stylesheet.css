@@ -1,15 +1,14 @@
 #dock {
     background-gradient-direction: vertical;
-    background-gradient-start: rgba(0,0,0,0.1);
-    background-gradient-end: rgba(0,0,0,0.2);
-    border-radius: 4px;
-    border: 1px solid rgba(0,0,0,0.5);
+    background-gradient-start: rgba(0,0,0,0.6);
+    background-gradient-end: rgba(0,0,0,0.7);
+    border-radius: 5px;
     padding: 1px 1px 2px 0px;
 }
  /* Panel */
 .dock-thumbnail {
     padding: 1px;
-    border-radius: 2px;
+    border-radius: 5px;
     transition-duration: 200;
 }
 
@@ -31,15 +30,15 @@
     border: 1px solid #5f5f5f;
     background-gradient-direction: vertical;
     background-gradient-start: rgba(30,30,30,0.3);
-    background-gradient-end: rgba(0,0,0,0.1);
+    background-gradient-end: rgba(0,0,0,0.2);
 }
 
 .dock-thumbnail:hover {
     padding: 1px;
     border: 1px solid rgba(0,0,0,0.1);
     background-gradient-direction: vertical;
-    background-gradient-start: rgba(10,10,10,0.1);
-    background-gradient-end: rgba(0,0,0,0.3);
+    background-gradient-start: rgba(180,180,180,0.5);
+    background-gradient-end: rgba(180,180,180,0.4);
 }
 
 .dock-thumbnail:active {
@@ -49,5 +48,13 @@
 }
 
 .dock-menu {
-    font-size: 12px
+    font-size: 12px;
+}
+
+.app-title{
+    border-radius: 5px;
+    background-color: rgba(10,10,10,0.8);
+    padding: 5px;
+    font-size: 12px;
+    color: #ffffff;
 }

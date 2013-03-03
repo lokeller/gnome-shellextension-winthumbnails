@@ -119,7 +119,7 @@ const App = new Lang.Class({
 					set_enum(style, Schema, key);
 				});
 			} else if (key == 'show-app-icon'){
-                let item = new Gtk.CheckButton({label: _('Application icon in the corner')})
+                let item = new Gtk.CheckButton({label: _('Show application icon in the corner')})
                 this.items.push(item);
                 this.vert_set_box.add(item);
  				Schema.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);		
@@ -141,8 +141,17 @@ const App = new Lang.Class({
 				item.selector.connect('changed', function(style){
 					set_enum(style, Schema, key);
 				});
-			}           
-                
+            } else if (key == 'show-app-title'){
+                let item = new Gtk.CheckButton({label: _('Show application title')})
+                this.items.push(item);
+                this.vert_set_box.add(item);
+                Schema.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);   
+			} else if (key == 'show-close-button'){
+                let item = new Gtk.CheckButton({label: _('Show application close button on hover')})
+                this.items.push(item);
+                this.vert_set_box.add(item);
+                Schema.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);         
+            }    
         }));
     this.main_vbox.show_all();
     }
