@@ -52,6 +52,7 @@ let closeButtonSize = 32;
 let thumbnail_size = 1;
 let app_icon_size = 32;
 let dockicon_size = 1;
+let title_padding = 32;
 
 // Keep enums in sync with GSettings schemas
 const PositionMode = {
@@ -764,7 +765,7 @@ DockThumbnail = new Lang.Class({
         let mutterWindow = this.window.get_compositor_private();
         let windowTexture = mutterWindow.get_texture ();
         let [width, height] = windowTexture.get_size();
-        let scale = Math.min(1.0, iconWidth / width, iconHeight / height);
+        let scale = Math.min(1.0, iconWidth / width, ( iconHeight - title_padding ) / height);
 
         clone = new Clutter.Group({clip_to_allocation: true});
         clone.set_size(this.iconWidth, this.iconHeight);
@@ -773,7 +774,7 @@ DockThumbnail = new Lang.Class({
             { source: windowTexture,
               reactive: true,
               x: (this.iconWidth - (width * scale)) / 2,
-              y: (this.iconHeight - (height * scale)) / 2,
+              y: ((this.iconHeight - title_padding) - (height * scale)) / 2,
               width: width * scale,
               height: height * scale
             });
@@ -803,7 +804,7 @@ DockThumbnail = new Lang.Class({
         }
     },    
 	
-    _addApplicationIcon: function(parent) {
+    _addApplicationIcon: function(parent, x, y) {
 			
         if (this.app) {
             this._app_icon = this.app.create_icon_texture(app_icon_size);
@@ -820,7 +821,8 @@ DockThumbnail = new Lang.Class({
 		
         if (this._dock._settings.get_enum(WTH_POSITION_KEY) == PositionMode.LEFT) {
             applicationIconBox = new St.Bin({x_align: St.Align.START, y_align: St.Align.END});
-            applicationIconBox.set_size(app_icon_size, parent.height - app_icon_size / 2);
+	    applicationIconBox.set_x(this.iconWidth / 2 - app_icon_size / 2);
+	    applicationIconBox.set_y((this.iconHeight - title_padding ) / 2 - app_icon_size / 2);
         }
         else {
             applicationIconBox = new St.Bin({x_align: St.Align.END, y_align: St.Align.END});
@@ -847,7 +849,7 @@ DockThumbnail = new Lang.Class({
         // let label_size = 32;
 
         if (this._dock._settings.get_enum(WTH_POSITION_KEY) == PositionMode.LEFT) {
-            applicationLabelBox = new St.Bin();
+            applicationLabelBox = new St.Bin({y_align: St.Align.END});
             applicationLabelBox.set_size(parent.width, parent.height);
         }
         else {
