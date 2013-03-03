@@ -746,7 +746,9 @@ DockThumbnail = new Lang.Class({
     select: function() {
         if (!this.highlighted) {
             this.actor.add_style_pseudo_class('hover');
-            this.closeButton.show();
+            if ( undefined != this.closeButton ) {
+		    this.closeButton.show();
+	    }
             this.highlighted = true;
         }
     },
@@ -754,7 +756,9 @@ DockThumbnail = new Lang.Class({
     unselect: function() {
         if (this.highlighted) {
             this.actor.remove_style_pseudo_class('hover');
-            this.closeButton.hide();
+            if ( undefined != this.closeButton ) {
+            	this.closeButton.hide();
+	    }
             this.highlighted = false;
         }
     },
