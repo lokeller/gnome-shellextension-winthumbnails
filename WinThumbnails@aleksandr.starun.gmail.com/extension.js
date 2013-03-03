@@ -589,23 +589,32 @@ const Dock = new Lang.Class({
                 thumbnail_size =  max_thumbnail_size;
             }            
             this._item_size = dockicon_size = thumbnail_size + 16;
-        }        
+        }
+
+	let thumbs = [];        
 
         for (let i = 0; i < running.length; i++) {
-            let app = running[i];
-            let windows = app.get_windows();
-            for (let j = 0; j< windows.length; j++) {
-                if (!this._isShowOnlyMinWin) {
-                    let display = new DockThumbnail(this, app, windows[j], thumbnail_size, thumbnail_size);
-                    icons++;
-                    this.addItem(display.actor);
-                } else if (windows[j].minimized) {    
-                    let display = new DockThumbnail(this, app, windows[j], thumbnail_size, thumbnail_size);
-                    icons++;
-                    this.addItem(display.actor);
-                }                                     
-            }
-        }
+
+		let app = running[i];
+	        let windows = app.get_windows();
+        	for (let j = 0; j< windows.length; j++) {
+
+			if (!this._isShowOnlyMinWin || windows[j].minimized) {
+				let thumb = new DockThumbnail(this, app, windows[j], thumbnail_size, thumbnail_size);
+				thumbs.push([ windows[j].get_stable_sequence(), thumb]);
+			}
+		}
+
+	}
+
+	thumbs.sort(function(x,y) { return x[0] > y[0] ; } );
+
+	for ( let i = 0 ; i < thumbs.length ; i++) {
+		this.addItem(thumbs[i][1].actor);
+	}
+
+	icons = thumbs.length;
+
         this._nicons=icons;
 
         let primary = Main.layoutManager.primaryMonitor;
