@@ -75,7 +75,7 @@ function updateClip(actor) {
 
     // Here we implicitly assume that the stage and actor's parent
     // share the same coordinate space
-    let clip = new Clutter.ActoropacBox({ x1: Math.max(monitor.x, allocation.x1),
+    let clip = new Clutter.ActorBox({ x1: Math.max(monitor.x, allocation.x1),
 				      y1: Math.max(monitor.y, allocation.y1),
 				      x2: Math.min(monitor.x + monitor.width, allocation.x2),
 				      y2: Math.min(monitor.y + monitor.height, allocation.y2) });
