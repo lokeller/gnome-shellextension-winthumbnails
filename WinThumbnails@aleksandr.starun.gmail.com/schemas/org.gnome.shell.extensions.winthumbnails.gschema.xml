@@ -22,7 +22,7 @@
       <description>Sets item size of the dock.</description>
     </key>
     <key type="b" name="autohide">
-      <default>false</default>
+      <default>true</default>
       <summary>Enable/disable autohide</summary>
     </key>
     <key name="hide-effect" enum="org.gnome.shell.extensions.winthumbnails.AutoHideEffect">
@@ -44,11 +44,11 @@
       <summary>Enable/disable application title.</summary>
     </key>
     <key type="b" name="show-close-button">
-      <default>true</default>
+      <default>false</default>
       <summary>Enable/disable application close button.</summary>
     </key>      
     <key type="b" name="show-window-tooltip">
-      <default>false</default>
+      <default>true</default>
       <summary>Enable/disable window tooltip.</summary>
     </key>    
     <key type="b" name="show-only-minimize-window">
