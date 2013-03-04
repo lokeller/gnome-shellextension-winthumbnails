@@ -12,7 +12,7 @@
 
   <schema path="/org/gnome/shell/extensions/winthumbnails/" id="org.gnome.shell.extensions.winthumbnails">
     <key name="position" enum="org.gnome.shell.extensions.winthumbnails.PositionMode">
-      <default>'right'</default>
+      <default>'left'</default>
       <summary>Position of the dock</summary>
       <description>Sets the position of the dock in the screen. Allowed values are 'right' or 'left'</description>
     </key>
