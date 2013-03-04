@@ -34,7 +34,7 @@
 }
 
 .dock-thumbnail:hover {
-    padding: 1px;
+    padding: 2px;
     border: 1px solid rgba(0,0,0,0.1);
     background-gradient-direction: vertical;
     background-gradient-start: rgba(180,180,180,0.5);

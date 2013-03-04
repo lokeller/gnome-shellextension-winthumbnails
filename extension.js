@@ -626,6 +626,7 @@ const Dock = new Lang.Class({
             this._item_size = dockicon_size = 1;
         }
 
+
         if (this._hideable && this._hidden) {
             this._hideDock();
         } else {
@@ -638,8 +639,8 @@ const Dock = new Lang.Class({
     },
 
     _getPreferredWidth: function (grid, forHeight, alloc) {
-        alloc.min_size = this._item_size;
-        alloc.natural_size = this._item_size + this._spacing;
+        alloc.min_size = this._item_size + 4*this._spacing;
+        alloc.natural_size = this._item_size + 4*this._spacing;
     },
 
     _getPreferredHeight: function (grid, forWidth, alloc) {
@@ -661,13 +662,14 @@ const Dock = new Lang.Class({
 
         for (let i = 0; i < children.length; i++) {
             let childBox = new Clutter.ActorBox();
-            childBox.x1 = x;
+            childBox.x1 = x + this._spacing;
             childBox.y1 = y;
             childBox.x2 = childBox.x1 + this._item_size;
             childBox.y2 = childBox.y1 + this._item_size;
             children[i].allocate(childBox, flags);
             y += this._item_size + this._spacing;
         }
+	updateClip(this.actor);
     },
 
 
@@ -786,10 +788,6 @@ const DockThumbnail = new Lang.Class({
 
 	    let [stageX, stageY] = this.actor.get_transformed_position();
 
-	    let itemHeight = this.actor.allocation.y2 - this.actor.allocation.y1;
-	    let itemWidth = this.actor.allocation.x2 - this.actor.allocation.x1;
-	    let labelWidth = this.label.get_width();
-
 	    let y = stageY + this.iconHeight - 17 ;
 	    let x = this.iconWidth + 32 ;
 
@@ -798,7 +796,6 @@ const DockThumbnail = new Lang.Class({
 
     hideLabel: function() {
 	    this.label.hide();
-
     },
 
 
