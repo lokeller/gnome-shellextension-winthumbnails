@@ -720,6 +720,7 @@ const DockThumbnail = new Lang.Class({
         this.actor.connect('enter-event', Lang.bind(this, this.select));
         this.actor.connect('leave-event', Lang.bind(this, this.unselect));
         this.actor.connect('clicked', Lang.bind(this, this._onClicked));
+        this.actor.connect('destroy', Lang.bind(this, this._onDestroy));
        
         this._menu = null;
         this._menuManager = new PopupMenu.PopupMenuManager(this);
@@ -750,6 +751,12 @@ const DockThumbnail = new Lang.Class({
         if (this._dock._isShowCloseButton) {
             this._AddCloseButton(this.actorBox, width);
         }  
+
+	this.label = new St.Label({ style_class: 'app-title'});
+	this.label.set_text(this.window.get_title());
+	Main.layoutManager.addChrome(this.label);
+	this.label.hide();
+
     },
 
     select: function() {
@@ -760,6 +767,7 @@ const DockThumbnail = new Lang.Class({
 	    }
             this.highlighted = true;
         }
+	this.showLabel();	
     },
 
     unselect: function() {
@@ -770,7 +778,29 @@ const DockThumbnail = new Lang.Class({
 	    }
             this.highlighted = false;
         }
+        this.hideLabel();
     },
+
+    showLabel: function() {
+	    this.label.show();
+
+	    let [stageX, stageY] = this.actor.get_transformed_position();
+
+	    let itemHeight = this.actor.allocation.y2 - this.actor.allocation.y1;
+	    let itemWidth = this.actor.allocation.x2 - this.actor.allocation.x1;
+	    let labelWidth = this.label.get_width();
+
+	    let y = stageY + this.iconHeight - 17 ;
+	    let x = this.iconWidth + 32 ;
+
+	    this.label.set_position(x, y);
+    },
+
+    hideLabel: function() {
+	    this.label.hide();
+
+    },
+
 
     set_size: function(iconWidth, iconHeight) {
         let clone = null;
@@ -955,6 +985,7 @@ const DockThumbnail = new Lang.Class({
             this.app.disconnect(this._stateChangedId);
         this._stateChangedId = 0;
         this._removeMenuTimeout();
+	Main.layoutManager.removeChrome(this.label);
     },
     
     popupMenu: function() {
