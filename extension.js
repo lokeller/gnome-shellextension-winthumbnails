@@ -50,7 +50,7 @@ const WTH_SHOW_CLOSE_BUTTON = 'show-close-button';
 // Old settings
 let closeButtonSize = 32;
 let thumbnail_size = 1;
-let app_icon_size = 32;
+let app_icon_size = 16;
 let dockicon_size = 1;
 let title_padding = 32;
 
