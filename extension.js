@@ -698,7 +698,7 @@ const Dock = new Lang.Class({
 });
 Signals.addSignalMethods(Dock.prototype);
 
-DockThumbnail = new Lang.Class({
+const DockThumbnail = new Lang.Class({
     Name: 'Dock.DockThumbnail',
     
     _init : function(dock, app, window, width, height) {
