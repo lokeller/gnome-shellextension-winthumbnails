@@ -752,7 +752,7 @@ const DockThumbnail = new Lang.Class({
             this._AddCloseButton(this.actorBox, width);
         }  
 
-	this.label = new St.Label({ style_class: 'app-title'});
+	this.label = new St.Label({ style_class: 'app-title-long'});
 	this.label.set_text(this.window.get_title());
 	Main.layoutManager.addChrome(this.label);
 	this.label.hide();
